@@ -3,4 +3,5 @@ GGJ 2020
 
 # DESCRIPTION
 
-puço
+- Jeux de plateforme multijoeur.
+- Totem a reconstruire ou temps limité.
