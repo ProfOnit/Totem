@@ -7,7 +7,7 @@ const monitor = require("@colyseus/monitor").monitor;
 
 const MyRoom = require('./MyRoom').MyRoom;
 
-const port = process.env.PORT || 2567;
+const port = process.env.PORT || 4242;
 const app = express()
 
 app.use(cors());
