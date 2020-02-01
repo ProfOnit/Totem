@@ -241,6 +241,7 @@ function (_Phaser$Scene) {
   }, {
     key: "preload",
     value: function preload() {
+      this.scale.resize(1920, 1080);
       this.load.image("tile", "./assets/tile.png");
       this.load.image("background", "./assets/canyon-background.png");
       this.load.spritesheet("player", "./assets/player.png", {
@@ -248,6 +249,7 @@ function (_Phaser$Scene) {
         frameHeight: 64
       });
       this.load.tilemapCSV("map", "./assets/mapFin.csv");
+      this.scale.startFullscreen();
     }
   }, {
     key: "create",
@@ -321,7 +323,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59528" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62571" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

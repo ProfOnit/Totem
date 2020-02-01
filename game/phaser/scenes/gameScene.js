@@ -54,10 +54,12 @@ export class gameScene extends Phaser.Scene {
     }
 
     preload() {
+        this.scale.resize(1920, 1080);
         this.load.image("tile", "./assets/tile.png");
         this.load.image("background", "./assets/canyon-background.png");
         this.load.spritesheet("player", "./assets/player.png", {frameWidth: 32, frameHeight: 64});
         this.load.tilemapCSV("map", "./assets/mapFin.csv");
+        this.scale.startFullscreen();
     }
 
     create() {
