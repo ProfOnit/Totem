@@ -7,3 +7,9 @@ It's a 2 teams PVP arcade game, each team have 1 Totem at 50% of their integrity
 # TECHNO
 - Network: Colyseus
 - Game: Phaser
+
+# PLAY THE GAME
+In server/ and client/ execute the following command:
+```shell script
+npm install | npm start
+```
