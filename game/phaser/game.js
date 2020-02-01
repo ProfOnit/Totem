@@ -2,8 +2,9 @@
 import { gameScene } from './scenes/gameScene'
 
 const config = {
-    widght: 500,
-    height: 500,
+    widght: 16 * 20,
+    height: 16 * 20,
+    parent: "game-container",
     type: Phaser.AUTO,
     scene: [
         gameScene

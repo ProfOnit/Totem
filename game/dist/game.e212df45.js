@@ -149,11 +149,15 @@ function (_Phaser$Scene) {
   _inherits(gameScene, _Phaser$Scene);
 
   function gameScene() {
+    var _this;
+
     _classCallCheck(this, gameScene);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(gameScene).call(this, {
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(gameScene).call(this, {
       key: "Game"
     }));
+    _this.secs = 60;
+    return _this;
   }
 
   _createClass(gameScene, [{
@@ -162,33 +166,55 @@ function (_Phaser$Scene) {
   }, {
     key: "movementManager",
     value: function movementManager() {
-      this.dude.setVelocity(0, 0);
-      if (this.keyboard.Z.isDown) this.dude.setVelocity(0, -50);
-      if (this.keyboard.S.isDown) this.dude.setVelocity(0, 50);
-      if (this.keyboard.Q.isDown) this.dude.setVelocity(-50, 0);
-      if (this.keyboard.D.isDown) this.dude.setVelocity(50, 0);
-      if (this.keyboard.D.isDown && this.keyboard.S.isDown) this.dude.setVelocity(50, 50);
-      if (this.keyboard.D.isDown && this.keyboard.Z.isDown) this.dude.setVelocity(50, -50);
-      if (this.keyboard.Q.isDown && this.keyboard.S.isDown) this.dude.setVelocity(-50, 50);
-      if (this.keyboard.Z.isDown && this.keyboard.Q.isDown) this.dude.setVelocity(-50, -50);
+      var x = this.dude.x;
+      var y = this.dude.y;
+      if (this.keyboard.Z.isDown) y -= 16;
+      if (this.keyboard.S.isDown) y += 16;
+      if (this.keyboard.Q.isDown) x -= 16;
+      if (this.keyboard.D.isDown) x += 16;
+      this.dude.x = x;
+      this.dude.y = y;
     }
   }, {
     key: "preload",
     value: function preload() {
-      this.load.image("grass", "./assets/grass.jfif");
+      this.load.image("tile", "./assets/tile.png");
       this.load.image("dude", "./assets/dude.png");
+      this.load.tilemapCSV("map", "./assets/mapFin.csv");
     }
   }, {
     key: "create",
     value: function create() {
+      var map = this.make.tilemap({
+        key: "map",
+        tileWidth: 16,
+        tileHeight: 16
+      });
+      var tileset = map.addTilesetImage("tile");
+      var layer = map.createStaticLayer(0, tileset, 0, 0);
+      map.setLayer(layer);
       this.keyboard = this.input.keyboard.addKeys("Z, Q, S, D");
-      this.add.image(0, 0, "grass").setOrigin(0);
       this.dude = this.physics.add.image(300, 100, "dude");
+    }
+  }, {
+    key: "tick",
+    value: function tick() {
+      this.secs--;
+
+      if (this.secs == 0) {
+        this.movementManager();
+        this.secs = 60;
+      }
     }
   }, {
     key: "update",
     value: function update() {
-      this.movementManager();
+      var timer = this.time.addEvent({
+        delay: 1000,
+        callback: this.tick,
+        callbackScope: this,
+        loop: true
+      });
     }
   }]);
 
@@ -202,8 +228,9 @@ exports.gameScene = gameScene;
 var _gameScene = require("./scenes/gameScene");
 
 var config = {
-  widght: 500,
-  height: 500,
+  widght: 16 * 20,
+  height: 16 * 20,
+  parent: "game-container",
   type: Phaser.AUTO,
   scene: [_gameScene.gameScene],
   physics: {
@@ -239,7 +266,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65101" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52127" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
