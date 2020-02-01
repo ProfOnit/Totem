@@ -125,12 +125,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.frameRatePlayerAnimation = exports.mapConfig = void 0;
 var mapConfig = {
-  tileSize: 96,
-  nbTileX: 15,
-  nbTileY: 8
+  tileSizeX: 64,
+  tileSizeY: 46,
+  nbTileX: 24,
+  nbTileY: 16
 };
 exports.mapConfig = mapConfig;
-var frameRatePlayerAnimation = 10;
+var frameRatePlayerAnimation = 5;
 exports.frameRatePlayerAnimation = frameRatePlayerAnimation;
 },{}],"phaser/scenes/gameScene.js":[function(require,module,exports) {
 "use strict";
@@ -160,17 +161,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+var map;
+
 var gameScene =
 /*#__PURE__*/
 function (_Phaser$Scene) {
   _inherits(gameScene, _Phaser$Scene);
 
   function gameScene() {
+    var _this;
+
     _classCallCheck(this, gameScene);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(gameScene).call(this, {
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(gameScene).call(this, {
       key: "Game"
     }));
+    _this.map = null;
+    _this.secs = 1;
+    return _this;
   }
 
   _createClass(gameScene, [{
@@ -215,24 +223,25 @@ function (_Phaser$Scene) {
       var x = this.player.x;
       var y = this.player.y;
 
-      if (this.keyboard.Z.isDown && this.player.y - _config.mapConfig.tileSize * 2 > 0) {
-        y -= _config.mapConfig.tileSize;
+      if (this.keyboard.Z.isDown && this.player.y - _config.mapConfig.tileSizeY > -_config.mapConfig.tileSizeY && map.layers[0].data[Math.round(this.player.y / _config.mapConfig.tileSizeY - 0.69)][Math.round(this.player.x / _config.mapConfig.tileSizeX - 0.69)].index != -1) {
+        //console.log();
+        y -= _config.mapConfig.tileSizeY;
         this.player.play("up");
       }
 
-      if (this.keyboard.S.isDown && this.player.y + _config.mapConfig.tileSize * 2 < _config.mapConfig.tileSize * _config.mapConfig.nbTileY) {
-        y += _config.mapConfig.tileSize;
+      if (this.keyboard.S.isDown && this.player.y + _config.mapConfig.tileSizeY < _config.mapConfig.tileSizeY * _config.mapConfig.nbTileY && map.layers[0].data[Math.round(this.player.y / _config.mapConfig.tileSizeY - 0.69) + 2][Math.round(this.player.x / _config.mapConfig.tileSizeX - 0.69)].index != -1) {
+        y += _config.mapConfig.tileSizeY;
         this.player.play("down");
       }
 
-      if (this.keyboard.Q.isDown && this.player.x - _config.mapConfig.tileSize * 2 > 0) {
-        x -= _config.mapConfig.tileSize;
+      if (this.keyboard.Q.isDown && this.player.x - _config.mapConfig.tileSizeX > 0 && map.layers[0].data[Math.round(this.player.y / _config.mapConfig.tileSizeY - 0.69) + 1][Math.round(this.player.x / _config.mapConfig.tileSizeX - 0.69) - 1].index != -1) {
+        x -= _config.mapConfig.tileSizeX;
         this.player.play("left");
       }
 
-      if (this.keyboard.D.isDown && this.player.x + _config.mapConfig.tileSize < _config.mapConfig.tileSize * _config.mapConfig.nbTileX) {
+      if (this.keyboard.D.isDown && this.player.x + _config.mapConfig.tileSizeX < _config.mapConfig.tileSizeX * _config.mapConfig.nbTileX && map.layers[0].data[Math.round(this.player.y / _config.mapConfig.tileSizeY - 0.69) + 1][Math.round(this.player.x / _config.mapConfig.tileSizeX - 0.69) + 1].index != -1) {
         this.player.play("right");
-        x += _config.mapConfig.tileSize;
+        x += _config.mapConfig.tileSizeX;
       }
 
       this.player.x = x;
@@ -242,35 +251,52 @@ function (_Phaser$Scene) {
     key: "preload",
     value: function preload() {
       this.scale.resize(1920, 1080);
-      this.load.image("tile", "./assets/plateform.png");
-      this.load.image("background", "./assets/canyon-background.png"); //this.load.image("plateform", "./assets/plateform.png");
-
+      this.load.image("plateform-64-46", "./assets/plateform-64-46.png");
+      this.load.image("background", "./assets/canyon-background.png");
       this.load.spritesheet("player", "./assets/player.png", {
         frameWidth: 32,
         frameHeight: 64
       });
-      this.load.tilemapCSV("map", "./assets/mapFin.csv"); // this.scale.startFullscreen();
+      this.load.tilemapCSV("map", "./assets/good.csv");
     }
   }, {
     key: "create",
     value: function create() {
-      var map = this.make.tilemap({
+      map = this.make.tilemap({
         key: "map",
-        tileWidth: _config.mapConfig.tileSize,
-        tileHeight: _config.mapConfig.tileSize
+        tileWidth: _config.mapConfig.tileSizeX,
+        tileHeight: _config.mapConfig.tileSizeY
       });
-      var tileset = map.addTilesetImage("tile");
-      this.add.image(1920 / 2, 1080 / 2, "background"); //this.add.image(100, 100, "plateform");
-
-      var layer = map.createStaticLayer(0, tileset, 0, 0);
+      console.log(map.layers[0].data);
+      var tileset = map.addTilesetImage("plateform-64-46", "plateform-64-46");
+      this.add.image(1920 / 2, 1080 / 2, "background");
+      map.createStaticLayer(0, tileset, 0, 0);
       this.keyboard = this.input.keyboard.addKeys("Z, Q, S, D");
       this.player = this.add.sprite(100, 100, "player", 0);
+      this.player.x = 32;
+      this.player.y = 32;
       this.animation();
+    }
+  }, {
+    key: "thick",
+    value: function thick() {
+      if (this.secs == 0) {
+        this.secs = 15;
+        this.movementManager();
+      }
+
+      this.secs--;
     }
   }, {
     key: "update",
     value: function update() {
-      this.movementManager();
+      var timer = this.time.addEvent({
+        delay: 1000,
+        // ms
+        callback: this.thick(),
+        callbackScope: this,
+        loop: true
+      });
     }
   }]);
 
@@ -286,8 +312,8 @@ var _gameScene = require("./scenes/gameScene");
 var _config = require("../config");
 
 var gameConfig = {
-  widght: _config.mapConfig.tileSize * _config.mapConfig.nbTileX,
-  height: _config.mapConfig.tileSize * _config.mapConfig.nbTileY,
+  widght: _config.mapConfig.tileSizeX * _config.mapConfig.nbTileX,
+  height: _config.mapConfig.tileSizeY * _config.mapConfig.nbTileY,
   parent: "game-container",
   type: Phaser.AUTO,
   scene: [_gameScene.gameScene],
@@ -324,7 +350,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62935" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63090" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

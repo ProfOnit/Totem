@@ -3,8 +3,8 @@ import { gameScene } from './scenes/gameScene'
 import { mapConfig } from '../config'
 
 const gameConfig = {
-    widght: mapConfig.tileSize * mapConfig.nbTileX,
-    height: mapConfig.tileSize * mapConfig.nbTileY,
+    widght: mapConfig.tileSizeX * mapConfig.nbTileX,
+    height: mapConfig.tileSizeY * mapConfig.nbTileY,
     parent: "game-container",
     type: Phaser.AUTO,
     scene: [
