@@ -160,6 +160,19 @@ function (_Phaser$Scene) {
     key: "init",
     value: function init() {}
   }, {
+    key: "movementManager",
+    value: function movementManager() {
+      this.dude.setVelocity(0, 0);
+      if (this.keyboard.Z.isDown) this.dude.setVelocity(0, -50);
+      if (this.keyboard.S.isDown) this.dude.setVelocity(0, 50);
+      if (this.keyboard.Q.isDown) this.dude.setVelocity(-50, 0);
+      if (this.keyboard.D.isDown) this.dude.setVelocity(50, 0);
+      if (this.keyboard.D.isDown && this.keyboard.S.isDown) this.dude.setVelocity(50, 50);
+      if (this.keyboard.D.isDown && this.keyboard.Z.isDown) this.dude.setVelocity(50, -50);
+      if (this.keyboard.Q.isDown && this.keyboard.S.isDown) this.dude.setVelocity(-50, 50);
+      if (this.keyboard.Z.isDown && this.keyboard.Q.isDown) this.dude.setVelocity(-50, -50);
+    }
+  }, {
     key: "preload",
     value: function preload() {
       this.load.image("grass", "./assets/grass.jfif");
@@ -168,9 +181,14 @@ function (_Phaser$Scene) {
   }, {
     key: "create",
     value: function create() {
+      this.keyboard = this.input.keyboard.addKeys("Z, Q, S, D");
       this.add.image(0, 0, "grass").setOrigin(0);
-      console.log(this);
-      this.game.physics.add.image(300, 100, "dude");
+      this.dude = this.physics.add.image(300, 100, "dude");
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      this.movementManager();
     }
   }]);
 
@@ -187,7 +205,10 @@ var config = {
   widght: 500,
   height: 500,
   type: Phaser.AUTO,
-  scene: [_gameScene.gameScene]
+  scene: [_gameScene.gameScene],
+  physics: {
+    default: "arcade"
+  }
 };
 var game = new Phaser.Game(config);
 },{"./scenes/gameScene":"phaser/scenes/gameScene.js"}],"C:/Users/Ervin Hgd/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -218,7 +239,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62677" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65101" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
