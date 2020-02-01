@@ -117,13 +117,28 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"phaser/scenes/gameScene.js":[function(require,module,exports) {
+})({"config.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.mapConfig = void 0;
+var mapConfig = {
+  tileSize: 16,
+  nbTileX: 20,
+  nbTileY: 20
+};
+exports.mapConfig = mapConfig;
+},{}],"phaser/scenes/gameScene.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.gameScene = void 0;
+
+var _config = require("../../config");
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -149,15 +164,11 @@ function (_Phaser$Scene) {
   _inherits(gameScene, _Phaser$Scene);
 
   function gameScene() {
-    var _this;
-
     _classCallCheck(this, gameScene);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(gameScene).call(this, {
+    return _possibleConstructorReturn(this, _getPrototypeOf(gameScene).call(this, {
       key: "Game"
     }));
-    _this.secs = 60;
-    return _this;
   }
 
   _createClass(gameScene, [{
@@ -168,10 +179,10 @@ function (_Phaser$Scene) {
     value: function movementManager() {
       var x = this.dude.x;
       var y = this.dude.y;
-      if (this.keyboard.Z.isDown) y -= 16;
-      if (this.keyboard.S.isDown) y += 16;
-      if (this.keyboard.Q.isDown) x -= 16;
-      if (this.keyboard.D.isDown) x += 16;
+      if (this.keyboard.Z.isDown && this.dude.y - _config.mapConfig.tileSize > 0) y -= _config.mapConfig.tileSize;
+      if (this.keyboard.S.isDown && this.dude.y + _config.mapConfig.tileSize < _config.mapConfig.tileSize * _config.mapConfig.nbTileY) y += _config.mapConfig.tileSize;
+      if (this.keyboard.Q.isDown && this.dude.x - _config.mapConfig.tileSize > 0) x -= _config.mapConfig.tileSize;
+      if (this.keyboard.D.isDown && this.dude.x + _config.mapConfig.tileSize < _config.mapConfig.tileSize * _config.mapConfig.nbTileX) x += _config.mapConfig.tileSize;
       this.dude.x = x;
       this.dude.y = y;
     }
@@ -187,8 +198,8 @@ function (_Phaser$Scene) {
     value: function create() {
       var map = this.make.tilemap({
         key: "map",
-        tileWidth: 16,
-        tileHeight: 16
+        tileWidth: _config.mapConfig.tileSize,
+        tileHeight: _config.mapConfig.tileSize
       });
       var tileset = map.addTilesetImage("tile");
       var layer = map.createStaticLayer(0, tileset, 0, 0);
@@ -197,24 +208,9 @@ function (_Phaser$Scene) {
       this.dude = this.physics.add.image(300, 100, "dude");
     }
   }, {
-    key: "tick",
-    value: function tick() {
-      this.secs--;
-
-      if (this.secs == 0) {
-        this.movementManager();
-        this.secs = 60;
-      }
-    }
-  }, {
     key: "update",
     value: function update() {
-      var timer = this.time.addEvent({
-        delay: 1000,
-        callback: this.tick,
-        callbackScope: this,
-        loop: true
-      });
+      this.movementManager();
     }
   }]);
 
@@ -222,14 +218,16 @@ function (_Phaser$Scene) {
 }(Phaser.Scene);
 
 exports.gameScene = gameScene;
-},{}],"phaser/game.js":[function(require,module,exports) {
+},{"../../config":"config.js"}],"phaser/game.js":[function(require,module,exports) {
 "use strict";
 
 var _gameScene = require("./scenes/gameScene");
 
-var config = {
-  widght: 16 * 20,
-  height: 16 * 20,
+var _config = require("../config");
+
+var gameConfig = {
+  widght: _config.mapConfig.tileSize * _config.mapConfig.nbTileX,
+  height: _config.mapConfig.tileSize * _config.mapConfig.nbTileY,
   parent: "game-container",
   type: Phaser.AUTO,
   scene: [_gameScene.gameScene],
@@ -237,8 +235,8 @@ var config = {
     default: "arcade"
   }
 };
-var game = new Phaser.Game(config);
-},{"./scenes/gameScene":"phaser/scenes/gameScene.js"}],"C:/Users/Ervin Hgd/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var game = new Phaser.Game(gameConfig);
+},{"./scenes/gameScene":"phaser/scenes/gameScene.js","../config":"config.js"}],"C:/Users/Ervin Hgd/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -266,7 +264,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52127" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59356" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
