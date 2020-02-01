@@ -123,13 +123,15 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.mapConfig = void 0;
+exports.frameRatePlayerAnimation = exports.mapConfig = void 0;
 var mapConfig = {
   tileSize: 16,
-  nbTileX: 20,
-  nbTileY: 20
+  nbTileX: 50,
+  nbTileY: 50
 };
 exports.mapConfig = mapConfig;
+var frameRatePlayerAnimation = 10;
+exports.frameRatePlayerAnimation = frameRatePlayerAnimation;
 },{}],"phaser/scenes/gameScene.js":[function(require,module,exports) {
 "use strict";
 
@@ -172,25 +174,79 @@ function (_Phaser$Scene) {
   }
 
   _createClass(gameScene, [{
-    key: "init",
-    value: function init() {}
+    key: "animation",
+    value: function animation() {
+      this.anims.create({
+        key: 'down',
+        frameRate: _config.frameRatePlayerAnimation,
+        frames: this.anims.generateFrameNames('player', {
+          start: 0,
+          end: 3
+        })
+      });
+      this.anims.create({
+        key: 'right',
+        frameRate: _config.frameRatePlayerAnimation,
+        frames: this.anims.generateFrameNames('player', {
+          start: 4,
+          end: 7
+        })
+      });
+      this.anims.create({
+        key: 'left',
+        frameRate: _config.frameRatePlayerAnimation,
+        frames: this.anims.generateFrameNames('player', {
+          start: 8,
+          end: 11
+        })
+      });
+      this.anims.create({
+        key: 'up',
+        frameRate: _config.frameRatePlayerAnimation,
+        frames: this.anims.generateFrameNames('player', {
+          start: 12,
+          end: 16
+        })
+      });
+    }
   }, {
     key: "movementManager",
     value: function movementManager() {
-      var x = this.dude.x;
-      var y = this.dude.y;
-      if (this.keyboard.Z.isDown && this.dude.y - _config.mapConfig.tileSize > 0) y -= _config.mapConfig.tileSize;
-      if (this.keyboard.S.isDown && this.dude.y + _config.mapConfig.tileSize < _config.mapConfig.tileSize * _config.mapConfig.nbTileY) y += _config.mapConfig.tileSize;
-      if (this.keyboard.Q.isDown && this.dude.x - _config.mapConfig.tileSize > 0) x -= _config.mapConfig.tileSize;
-      if (this.keyboard.D.isDown && this.dude.x + _config.mapConfig.tileSize < _config.mapConfig.tileSize * _config.mapConfig.nbTileX) x += _config.mapConfig.tileSize;
-      this.dude.x = x;
-      this.dude.y = y;
+      var x = this.player.x;
+      var y = this.player.y;
+
+      if (this.keyboard.Z.isDown && this.player.y - _config.mapConfig.tileSize * 2 > 0) {
+        y -= _config.mapConfig.tileSize;
+        this.player.play("up");
+      }
+
+      if (this.keyboard.S.isDown && this.player.y + _config.mapConfig.tileSize * 2 < _config.mapConfig.tileSize * _config.mapConfig.nbTileY) {
+        y += _config.mapConfig.tileSize;
+        this.player.play("down");
+      }
+
+      if (this.keyboard.Q.isDown && this.player.x - _config.mapConfig.tileSize * 2 > 0) {
+        x -= _config.mapConfig.tileSize;
+        this.player.play("left");
+      }
+
+      if (this.keyboard.D.isDown && this.player.x + _config.mapConfig.tileSize < _config.mapConfig.tileSize * _config.mapConfig.nbTileX) {
+        this.player.play("right");
+        x += _config.mapConfig.tileSize;
+      }
+
+      this.player.x = x;
+      this.player.y = y;
     }
   }, {
     key: "preload",
     value: function preload() {
       this.load.image("tile", "./assets/tile.png");
-      this.load.image("dude", "./assets/dude.png");
+      this.load.image("background", "./assets/canyon-background.png");
+      this.load.spritesheet("player", "./assets/player.png", {
+        frameWidth: 32,
+        frameHeight: 64
+      });
       this.load.tilemapCSV("map", "./assets/mapFin.csv");
     }
   }, {
@@ -202,10 +258,11 @@ function (_Phaser$Scene) {
         tileHeight: _config.mapConfig.tileSize
       });
       var tileset = map.addTilesetImage("tile");
-      var layer = map.createStaticLayer(0, tileset, 0, 0);
-      map.setLayer(layer);
+      this.add.image(1920 / 2, 1080 / 2, "background"); //var layer = map.createStaticLayer(0, tileset, 0, 0);
+
       this.keyboard = this.input.keyboard.addKeys("Z, Q, S, D");
-      this.dude = this.physics.add.image(300, 100, "dude");
+      this.player = this.add.sprite(100, 100, "player", 0);
+      this.animation();
     }
   }, {
     key: "update",
@@ -264,7 +321,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59356" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59528" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

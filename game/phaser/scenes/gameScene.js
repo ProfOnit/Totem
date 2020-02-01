@@ -1,4 +1,4 @@
-import { mapConfig } from '../../config'
+import { mapConfig, frameRatePlayerAnimation } from '../../config'
 
 export class gameScene extends Phaser.Scene {
     constructor() {
@@ -7,28 +7,56 @@ export class gameScene extends Phaser.Scene {
         });
     }
 
-    init() {
-
+    animation() {
+        this.anims.create({
+            key: 'down',
+            frameRate: frameRatePlayerAnimation,
+            frames: this.anims.generateFrameNames('player', {start: 0, end: 3})
+        });
+        this.anims.create({
+            key: 'right',
+            frameRate: frameRatePlayerAnimation,
+            frames: this.anims.generateFrameNames('player', {start: 4, end: 7})
+        });
+        this.anims.create({
+            key: 'left',
+            frameRate: frameRatePlayerAnimation,
+            frames: this.anims.generateFrameNames('player', {start: 8, end: 11})
+        });
+        this.anims.create({
+            key: 'up',
+            frameRate: frameRatePlayerAnimation,
+            frames: this.anims.generateFrameNames('player', {start: 12, end: 16})
+        });
     }
 
     movementManager() {
-        let x = this.dude.x;
-        let y = this.dude.y;
-        if (this.keyboard.Z.isDown && this.dude.y - mapConfig.tileSize > 0)
+        let x = this.player.x;
+        let y = this.player.y;
+        if (this.keyboard.Z.isDown && this.player.y - (mapConfig.tileSize * 2) > 0) {
             y -= mapConfig.tileSize;
-        if (this.keyboard.S.isDown && this.dude.y + mapConfig.tileSize < mapConfig.tileSize * mapConfig.nbTileY)
+            this.player.play("up");
+        }
+        if (this.keyboard.S.isDown && this.player.y + (mapConfig.tileSize * 2) < mapConfig.tileSize * mapConfig.nbTileY) {
             y += mapConfig.tileSize;
-        if (this.keyboard.Q.isDown && this.dude.x - mapConfig.tileSize > 0)
+            this.player.play("down");
+        }
+        if (this.keyboard.Q.isDown && this.player.x - (mapConfig.tileSize * 2) > 0) {
             x -= mapConfig.tileSize;
-        if (this.keyboard.D.isDown && this.dude.x + mapConfig.tileSize < mapConfig.tileSize * mapConfig.nbTileX)
+            this.player.play("left");
+        }
+        if (this.keyboard.D.isDown && this.player.x + mapConfig.tileSize < mapConfig.tileSize * mapConfig.nbTileX) {
+            this.player.play("right");
             x += mapConfig.tileSize;
-        this.dude.x = x;
-        this.dude.y = y;
+        }
+        this.player.x = x;
+        this.player.y = y;
     }
 
     preload() {
         this.load.image("tile", "./assets/tile.png");
-        this.load.image("dude", "./assets/dude.png");
+        this.load.image("background", "./assets/canyon-background.png");
+        this.load.spritesheet("player", "./assets/player.png", {frameWidth: 32, frameHeight: 64});
         this.load.tilemapCSV("map", "./assets/mapFin.csv");
     }
 
@@ -39,12 +67,11 @@ export class gameScene extends Phaser.Scene {
             tileHeight: mapConfig.tileSize
         });
         var tileset = map.addTilesetImage("tile");
-        var layer = map.createStaticLayer(0, tileset, 0, 0);
-        map.setLayer(layer)
-
+        this.add.image(1920 / 2, 1080 / 2, "background");
+        //var layer = map.createStaticLayer(0, tileset, 0, 0);
         this.keyboard = this.input.keyboard.addKeys("Z, Q, S, D");
-        this.dude = this.physics.add.image(300, 100, "dude");
-
+        this.player = this.add.sprite(100, 100, "player", 0);
+        this.animation();
     }
 
     update() {
