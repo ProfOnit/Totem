@@ -117,186 +117,74 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"config.js":[function(require,module,exports) {
-"use strict";
+})({"../../../../usr/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.frameRatePlayerAnimation = exports.mapConfig = void 0;
-var mapConfig = {
-  tileSize: 96,
-  nbTileX: 15,
-  nbTileY: 8
-};
-exports.mapConfig = mapConfig;
-var frameRatePlayerAnimation = 10;
-exports.frameRatePlayerAnimation = frameRatePlayerAnimation;
-},{}],"phaser/scenes/gameScene.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.gameScene = void 0;
-
-var _config = require("../../config");
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var gameScene =
-/*#__PURE__*/
-function (_Phaser$Scene) {
-  _inherits(gameScene, _Phaser$Scene);
-
-  function gameScene() {
-    _classCallCheck(this, gameScene);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(gameScene).call(this, {
-      key: "Game"
-    }));
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
 
-  _createClass(gameScene, [{
-    key: "animation",
-    value: function animation() {
-      this.anims.create({
-        key: 'down',
-        frameRate: _config.frameRatePlayerAnimation,
-        frames: this.anims.generateFrameNames('player', {
-          start: 0,
-          end: 3
-        })
-      });
-      this.anims.create({
-        key: 'right',
-        frameRate: _config.frameRatePlayerAnimation,
-        frames: this.anims.generateFrameNames('player', {
-          start: 4,
-          end: 7
-        })
-      });
-      this.anims.create({
-        key: 'left',
-        frameRate: _config.frameRatePlayerAnimation,
-        frames: this.anims.generateFrameNames('player', {
-          start: 8,
-          end: 11
-        })
-      });
-      this.anims.create({
-        key: 'up',
-        frameRate: _config.frameRatePlayerAnimation,
-        frames: this.anims.generateFrameNames('player', {
-          start: 12,
-          end: 16
-        })
-      });
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
-  }, {
-    key: "movementManager",
-    value: function movementManager() {
-      var x = this.player.x;
-      var y = this.player.y;
-
-      if (this.keyboard.Z.isDown && this.player.y - _config.mapConfig.tileSize * 2 > 0) {
-        y -= _config.mapConfig.tileSize;
-        this.player.play("up");
-      }
-
-      if (this.keyboard.S.isDown && this.player.y + _config.mapConfig.tileSize * 2 < _config.mapConfig.tileSize * _config.mapConfig.nbTileY) {
-        y += _config.mapConfig.tileSize;
-        this.player.play("down");
-      }
-
-      if (this.keyboard.Q.isDown && this.player.x - _config.mapConfig.tileSize * 2 > 0) {
-        x -= _config.mapConfig.tileSize;
-        this.player.play("left");
-      }
-
-      if (this.keyboard.D.isDown && this.player.x + _config.mapConfig.tileSize < _config.mapConfig.tileSize * _config.mapConfig.nbTileX) {
-        this.player.play("right");
-        x += _config.mapConfig.tileSize;
-      }
-
-      this.player.x = x;
-      this.player.y = y;
-    }
-  }, {
-    key: "preload",
-    value: function preload() {
-      this.scale.resize(1920, 1080);
-      this.load.image("tile", "./assets/plateform.png");
-      this.load.image("background", "./assets/canyon-background.png"); //this.load.image("plateform", "./assets/plateform.png");
-
-      this.load.spritesheet("player", "./assets/player.png", {
-        frameWidth: 32,
-        frameHeight: 64
-      });
-      this.load.tilemapCSV("map", "./assets/mapFin.csv"); // this.scale.startFullscreen();
-    }
-  }, {
-    key: "create",
-    value: function create() {
-      var map = this.make.tilemap({
-        key: "map",
-        tileWidth: _config.mapConfig.tileSize,
-        tileHeight: _config.mapConfig.tileSize
-      });
-      var tileset = map.addTilesetImage("tile");
-      this.add.image(1920 / 2, 1080 / 2, "background"); //this.add.image(100, 100, "plateform");
-
-      var layer = map.createStaticLayer(0, tileset, 0, 0);
-      this.keyboard = this.input.keyboard.addKeys("Z, Q, S, D");
-      this.player = this.add.sprite(100, 100, "player", 0);
-      this.animation();
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      this.movementManager();
-    }
-  }]);
-
-  return gameScene;
-}(Phaser.Scene);
-
-exports.gameScene = gameScene;
-},{"../../config":"config.js"}],"phaser/game.js":[function(require,module,exports) {
-"use strict";
-
-var _gameScene = require("./scenes/gameScene");
-
-var _config = require("../config");
-
-var gameConfig = {
-  widght: _config.mapConfig.tileSize * _config.mapConfig.nbTileX,
-  height: _config.mapConfig.tileSize * _config.mapConfig.nbTileY,
-  parent: "game-container",
-  type: Phaser.AUTO,
-  scene: [_gameScene.gameScene],
-  physics: {
-    default: "arcade"
   }
-};
-var game = new Phaser.Game(gameConfig);
-},{"./scenes/gameScene":"phaser/scenes/gameScene.js","../config":"config.js"}],"../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../../../../usr/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../../../../usr/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -500,5 +388,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","phaser/game.js"], null)
-//# sourceMappingURL=/game.e212df45.js.map
+},{}]},{},["../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/index.js.map

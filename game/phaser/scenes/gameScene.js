@@ -55,11 +55,12 @@ export class gameScene extends Phaser.Scene {
 
     preload() {
         this.scale.resize(1920, 1080);
-        this.load.image("tile", "./assets/tile.png");
+        this.load.image("tile", "./assets/plateform.png");
         this.load.image("background", "./assets/canyon-background.png");
+        //this.load.image("plateform", "./assets/plateform.png");
         this.load.spritesheet("player", "./assets/player.png", {frameWidth: 32, frameHeight: 64});
         this.load.tilemapCSV("map", "./assets/mapFin.csv");
-        this.scale.startFullscreen();
+        // this.scale.startFullscreen();
     }
 
     create() {
@@ -70,7 +71,8 @@ export class gameScene extends Phaser.Scene {
         });
         var tileset = map.addTilesetImage("tile");
         this.add.image(1920 / 2, 1080 / 2, "background");
-        //var layer = map.createStaticLayer(0, tileset, 0, 0);
+        //this.add.image(100, 100, "plateform");
+        var layer = map.createStaticLayer(0, tileset, 0, 0);
         this.keyboard = this.input.keyboard.addKeys("Z, Q, S, D");
         this.player = this.add.sprite(100, 100, "player", 0);
         this.animation();
