@@ -296,7 +296,7 @@ var gameConfig = {
   }
 };
 var game = new Phaser.Game(gameConfig);
-},{"./scenes/gameScene":"phaser/scenes/gameScene.js","../config":"config.js"}],"../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./scenes/gameScene":"phaser/scenes/gameScene.js","../config":"config.js"}],"C:/Users/Ervin Hgd/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -324,7 +324,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36407" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62935" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -500,5 +500,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","phaser/game.js"], null)
+},{}]},{},["C:/Users/Ervin Hgd/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","phaser/game.js"], null)
 //# sourceMappingURL=/game.e212df45.js.map
