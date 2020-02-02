@@ -1,0 +1,17 @@
+{
+  "name": "phaser-tilemap-post-2-03-drawing-platformer",
+  "version": "1.0.0",
+  "description": "Drawing platforms",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "phaser": "3.16.2"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.6.1"
+  },
+  "keywords": []
+}
